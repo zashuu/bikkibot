@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var seibahbot = require('../lib');
+var bikkibot = require('../lib');
 
 describe('seibahbot', function () {
   it('should have unit test!', function () {

@@ -1,5 +1,5 @@
-# seibahbot [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
-> Seibahbot main bot and discord interface
+# Bikkibot [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
+> Bikkibot code, just a testing discord bot
 
 ## Installation
 
@@ -13,6 +13,7 @@ $ npm install
 ```js
 $ npm run bot
 ```
+
 ## License
 
 MIT © [Yuri-M-Dias]()

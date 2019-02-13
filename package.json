@@ -1,49 +1,35 @@
 {
   "name": "bikkibot",
   "version": "0.0.1",
-  "description": "Bikkibot bot code",
-  "homepage": "",
-  "author": {
-    "name": "Yuri-M-Dias",
-    "email": "",
-    "url": ""
+  "description": "Bikkibot code, just a testing discord bot",
+  "main": "index.js",
+  "directories": {
+    "src": "src",
+    "test": "test"
   },
-  "files": [
-    "lib"
-  ],
-  "main": "lib/index.js",
-  "keywords": [
-    "discord",
-    "bot"
-  ],
   "scripts": {
-    "bot": "nodemon ./lib/index.js",
-    "prepublish": "gulp prepublish",
-    "test": "gulp"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env FORCE_COLOR=1 forever --minUptime 1000 --spinSleepTime 1000 src/index.js"
   },
-  "devDependencies": {
-    "eslint": "^3.1.1",
-    "eslint-config-xo-space": "^0.15.0",
-    "gulp": "^3.9.0",
-    "gulp-eslint": "^3.0.1",
-    "gulp-exclude-gitignore": "^1.0.0",
-    "gulp-line-ending-corrector": "^1.0.1",
-    "gulp-istanbul": "^1.0.0",
-    "gulp-mocha": "^3.0.1",
-    "gulp-plumber": "^1.0.0",
-    "gulp-nsp": "^2.1.0",
-    "gulp-coveralls": "^0.1.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zashuu/bikkibot.git"
   },
-  "eslintConfig": {
-    "extends": "xo-space",
-    "env": {
-      "mocha": true
-    }
-  },
-  "repository": "zashuu/bikkibot",
+  "keywords": [],
+  "author": "Yuri-M-Dias",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zashuu/bikkibot/issues"
+  },
+  "homepage": "https://github.com/zashuu/bikkibot#readme",
   "dependencies": {
-    "clapp": "^1.1.1",
-    "discord.js": "^11.0.0"
+    "assert": "^1.4.1",
+    "chalk": "^2.4.2",
+    "cross-env": "^5.2.0",
+    "discord.js": "^11.4.2",
+    "forever": "^0.15.3",
+    "moment": "^2.24.0",
+    "moment-duration-format": "^2.2.2",
+    "nodemon": "^1.18.10"
   }
 }
