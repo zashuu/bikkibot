@@ -1,6 +1,8 @@
 # Bikkibot [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 > Bikkibot code, just a testing discord bot
 
+Most of the code has been copied over from [here](https://github.com/AnIdiotsGuide/guidebot).
+
 ## Installation
 
 Clone this repository, and run:
