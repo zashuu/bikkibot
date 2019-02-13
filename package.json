@@ -1,7 +1,7 @@
 {
-  "name": "seibahbot",
-  "version": "0.0.0",
-  "description": "Seibahbot main bot and discord interface",
+  "name": "bikkibot",
+  "version": "0.0.1",
+  "description": "Bikkibot bot code",
   "homepage": "",
   "author": {
     "name": "Yuri-M-Dias",
@@ -17,7 +17,7 @@
     "bot"
   ],
   "scripts": {
-    "bot": "node ./lib/index.js",
+    "bot": "nodemon ./lib/index.js",
     "prepublish": "gulp prepublish",
     "test": "gulp"
   },
@@ -40,7 +40,7 @@
       "mocha": true
     }
   },
-  "repository": "Yuri-M-Dias/seibahbot",
+  "repository": "zashuu/bikkibot",
   "license": "MIT",
   "dependencies": {
     "clapp": "^1.1.1",
