@@ -13,7 +13,7 @@ $ npm install
 ## Usage
 
 ```js
-$ npm run bot
+$ npm start
 ```
 
 ## License
