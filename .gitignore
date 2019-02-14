@@ -1,3 +1,6 @@
 node_modules
 coverage
 config.js
+
+data
+.tern-port
