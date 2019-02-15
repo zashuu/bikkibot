@@ -17,13 +17,6 @@ client.messagesMacros = new Enmap({
   polling: true
 });
 
-client.imagesMacros = new Enmap({
-  name: "images",
-  autoFetch: true,
-  fetchAll: false,
-  polling: true
-});
-
 // Functions
 client.commands = {};
 
@@ -36,35 +29,47 @@ client.commands.stats = (message, command, args) => {
 • Servers    :: ${client.guilds.size.toLocaleString()}
 • Channels   :: ${client.channels.size.toLocaleString()}
 • Discord.js :: v${version}
-• Node       :: ${process.version}`, {code: "asciidoc"});
+• Node       :: ${process.version}
+  `, {code: "asciidoc"});
 };
 
 client.commands.ping = async (message, command, args) => {
   const msg = await message.channel.send("Ping?");
-  msg.edit(`Pong !Latency is ${msg.createdTimestamp -
-                               message.createdTimestamp} ms.API Latency is ${
-      Math.round(client.ping)} ms`);
+  msg.edit(`
+Pong! Latency is ${msg.createdTimestamp - message.createdTimestamp} ms. API Latency is ${Math.round(client.ping)} ms
+  `.trim());
 };
 
 client.commands.reboot = async (message, command, args) => {
   await message.reply("Bot is shutting down.");
-  client.logger.log(`Received a reboot from message from ${message.channel}`);
+  client.logger.log(`Received a reboot from message from ${message.author.id}`);
   process.exit(1); // Cleaner exit code?
 };
 
 client.commands.macroadd = async (message, command, args) => {
+  let deletable = false;
+  if (args[0] == 'delete') {
+    deletable = !!!deletable;
+    args.shift();
+  }
   const messageKey = args.join("");
   client.logger.log(`Adding a new messageKey ${messageKey}`);
   const response = await client.awaitReply(message, `Your next message will be the macro, unless you type "cancel"`);
-  if (["n", "no", "cancel"].includes(response)) {
-    return message.reply("Cancelled, nothing was added.");
+  if (["n", "no", "cancel"].includes(response.content)) {
+    return message.reply("cancelled, nothing was added.");
   }
+  let imageURL = response.attachments.reduce((acc, attachment) => {
+      client.logger.log(`With attachment ${attachment.filename}`);
+      return attachment.url;
+  }, null);
   await client.messagesMacros.defer;
-  // Needs treatment for emojis, and all that
+  const savedResponse = response.content || "Bwaka!";
   client.messagesMacros.set(messageKey, {
       createdBy: message.author.id,
       guild: message.guild.id,
-      response: response
+      deletable: deletable,
+      imageURL: imageURL,
+      response: response.content
   });
   message.reply(`Macro "${args}" was added`);
 };
@@ -73,7 +78,6 @@ client.commands.macrols = async (message, command, args) => {
   const messageKey = args.join("");
   await client.messagesMacros.defer;
   const keys = client.messagesMacros.indexes;
-  //await message.reply(`Macro "${args}" was added`);
   client.logger.log(`Found keys: ${keys}`);
   const embed = new Discord.RichEmbed()
     .setTitle("Message Macros")
@@ -92,13 +96,13 @@ client.commands.macrorm = async (message, command, args) => {
   const messageKey = args.join("");
   client.logger.log(`Deleting macro ${messageKey}`);
   const response = await client.awaitReply(message, `Are you sure?`);
-  if (["n", "no", "cancel"].includes(response)) {
+  if (["n", "no", "cancel"].includes(response.content)) {
     return message.reply("Cancelled, nothing was added.");
   }
   await client.messagesMacros.defer;
   // Needs treatment for emojis, and all that
   client.messagesMacros.delete(messageKey);
-  message.reply(`Macro "${args}" was deleted`);
+  message.reply(`macro "${args}" was deleted`);
 };
 
 client.awaitReply = async (msg, question, limit = 60000) => {
@@ -106,11 +110,22 @@ client.awaitReply = async (msg, question, limit = 60000) => {
   await msg.channel.send(question);
   try {
     const collected = await msg.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
-    return collected.first().content;
+    return collected.first();
   } catch (e) {
     return false;
   }
 };
+
+client.commands.talkback = async (message, command, args) => {
+  const response = await client.awaitReply(message, `Talk back!`);
+  if (response.attachments) {
+    response.attachments.every((attachment) => {
+      message.reply(`Right back at you: ${attachment.url}`);
+    });
+  }
+};
+
+// Answers!
 
 generalMessageAnswer = async (message) => {
   if (message.author.bot) return;
@@ -134,10 +149,19 @@ generalMessageAnswer = async (message) => {
   //client.logger.log(`Looking for ${messageKey}`);
   if (client.messagesMacros.has(messageKey)) {
     const macroInfo = client.messagesMacros.get(messageKey);
-    await message.channel.send(macroInfo.response);
-    await message.delete(); // Maybe customizable?
+    let responseMsg = macroInfo.response;
+    let messageOptions = {};
+    if (macroInfo.imageURL) {
+      // This will force discord to reupload the image, not good
+      //messageOptions.files = [macroInfo.imageURL];
+      responseMsg = responseMsg.concat(`\n${macroInfo.imageURL}`);
+    }
+    await message.channel.send(responseMsg, messageOptions);
+    if (macroInfo.deletable) {
+      await message.delete(); // Maybe customizable?
+    }
+    return;
   }
-  //await imagesMacros.defer;
 }
 
 const init = async () => {
