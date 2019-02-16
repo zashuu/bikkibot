@@ -78,7 +78,7 @@ client.commands.macrols = async (message, command, args) => {
   const messageKey = args.join("");
   await client.messagesMacros.defer;
   const keys = client.messagesMacros.indexes;
-  client.logger.log(`Found keys: ${keys}`);
+  //client.logger.log(`Found keys: ${keys}`);
   const embed = new Discord.RichEmbed()
     .setTitle("Message Macros")
     .setAuthor(client.user.username, client.user.avatarURL)
@@ -109,7 +109,10 @@ client.awaitReply = async (msg, question, limit = 60000) => {
   const filter = m => m.author.id === msg.author.id;
   await msg.channel.send(question);
   try {
-    const collected = await msg.channel.awaitMessages(filter, { max: 1, time: limit, errors: ["time"] });
+    const collected = await msg.channel.awaitMessages(
+      filter,
+      { max: 1, time: limit, errors: ["time"] }
+    );
     return collected.first();
   } catch (e) {
     return false;
