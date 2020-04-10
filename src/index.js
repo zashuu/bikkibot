@@ -34,11 +34,13 @@ client.commands.stats = (message, command, args) => {
 };
 
 client.commands.ping = async (message, command, args) => {
-  const msg = await message.channel.send("Ping?");
+  const msg = await message.channel.send("HEIKI?");
   msg.edit(`
-Pong! Latency is ${msg.createdTimestamp - message.createdTimestamp} ms. API Latency is ${Math.round(client.ping)} ms
+HECCHARA! Latency is ${msg.createdTimestamp - message.createdTimestamp} ms. API Latency is ${Math.round(client.ping)} ms
   `.trim());
 };
+
+client.commands.heiki = client.commands.ping;
 
 client.commands.reboot = async (message, command, args) => {
   await message.reply("Bot is shutting down.");
@@ -79,17 +81,14 @@ client.commands.macrols = async (message, command, args) => {
   await client.messagesMacros.defer;
   const keys = client.messagesMacros.indexes;
   //client.logger.log(`Found keys: ${keys}`);
-  const embed = new Discord.RichEmbed()
-    .setTitle("Message Macros")
-    .setAuthor(client.user.username, client.user.avatarURL)
-    .setDescription("All macros defined")
-    .setColor(0x00AE86);
+  let macros = ["These is the full list:"];
   let count = 0;
   for(let key of keys) {
-    embed.addField(`Macro-${count}`, `${key}`);
+    macros.push(`Macro-${count}: ${key}`);
     count++;
   }
-  return message.channel.send({embed});
+  let listReply = macros.join("\n");
+  return message.reply(listReply);
 };
 
 client.commands.macrorm = async (message, command, args) => {
@@ -121,6 +120,7 @@ client.awaitReply = async (msg, question, limit = 60000) => {
 
 client.commands.talkback = async (message, command, args) => {
   const response = await client.awaitReply(message, `Talk back!`);
+  client.logger.log(`Talking back!`);
   if (response.attachments) {
     response.attachments.every((attachment) => {
       message.reply(`Right back at you: ${attachment.url}`);
