@@ -181,6 +181,7 @@ process.on("uncaughtException", (err) => {
 
 process.on("unhandledRejection", err => {
   client.logger.error(`Unhandled rejection: ${err}`);
+  process.exit(1); // Why is this needed?
 });
 
 init();
